@@ -19,10 +19,16 @@ mongoose.connect(mongouri, {
 
 app.post('/shorturl', async (req, res)=>{
     const body = req.body;
-    console.log(body);
-    if(!body.url){
+    if (!body.url) {
         return res.status(400).json('URL is required');
     }
+    if (!/^https?:\/\//i.test(body.url)) {
+        body.url = "http://" + body.url;
+    }
+    console.log("ok so this is running " , body);
+    
+    console.log("now the other one :", body.url);
+    
     const shortid = nanoid(6);
     await Url.create({
         shortid: shortid,
@@ -31,6 +37,22 @@ app.post('/shorturl', async (req, res)=>{
     })
 return res.json({id: shortid});
 })
+
+app.get('/:shortid', async (req, res)=>{
+
+ try {
+        const id = await Url.findOne({ shortid: req.params.shortid });
+        if (id) {
+            id.visited.push({ timestamp: new Date() });
+            await id.save();
+            return res.redirect(id.redirecturl);
+        }
+        return res.status(404).json({ error: "Short URL not found" });
+    } catch (err) {
+        return res.status(500).json({ error: "Server error" });
+    }
+
+});
 
 app.get('/', (req, res) => {
     res.send('Hello World!');

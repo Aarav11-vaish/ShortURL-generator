@@ -13,7 +13,7 @@ const urlschema = new mongoose.Schema({
     },
    visited :[
     {
-        timestamp: {type: Number}
+        timestamp: {type: Date, default : Date.now}
     }
    ]
 }, {timestamps:true});
