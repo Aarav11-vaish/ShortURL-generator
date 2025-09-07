@@ -5,7 +5,10 @@ import { nanoid } from 'nanoid';
 import Url from './model/model.js'
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173'
+}
+));
 
 const port = process.env.PORT || 5000;
 const mongouri= 'mongodb://127.0.0.1:27017/shorturl';
@@ -28,7 +31,11 @@ app.post('/shorturl', async (req, res)=>{
     console.log("ok so this is running " , body);
     
     console.log("now the other one :", body.url);
-    
+  const existing = await Url.findOne({redirecturl: body.url});
+  if(existing){
+    return res.json({id: existing.shortid});
+  }
+
     const shortid = nanoid(6);
     await Url.create({
         shortid: shortid,
