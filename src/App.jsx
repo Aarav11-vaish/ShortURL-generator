@@ -3,7 +3,7 @@ import { useState } from "react";
 function App() {
   const [url, setUrl] = useState("");
   const [shortId, setShortId] = useState("");
-const [error, setError] = useState(false);
+  const [error, setError] = useState(false);
   const handleClick = async () => {
     try {
       const res = await fetch("http://localhost:5000/shorturl", {
@@ -13,11 +13,11 @@ const [error, setError] = useState(false);
         },
         body: JSON.stringify({ url }),
       });
-if(res.status==400){
-setError(true);
-return;
-}
-setError(false);
+      if (res.status == 400) {
+        setError(true);
+        return;
+      }
+      setError(false);
 
       const data = await res.json();
       console.log(data);
@@ -35,7 +35,7 @@ setError(false);
         </h1>
         <div className="bg-white p-6 rounded-lg shadow-lg">
           <label className=" text-gray-700 font-medium mb-2">
-            Please enter the URL: 
+            Please enter the URL:
           </label>
           <input
             type="text"
@@ -68,12 +68,12 @@ setError(false);
         )
         }
         {
-          error &&(
+          error && (
             <div className="bg-red-200 p-4 rounded-lg shadow-lg mt-4">
-            <p className="text-red-700">
-              ⚠️enter the URL!!
-            </p>
-          </div>
+              <p className="text-red-700">
+                ⚠️enter the URL!!
+              </p>
+            </div>
 
           )
         }
