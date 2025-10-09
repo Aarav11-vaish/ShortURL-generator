@@ -28,9 +28,7 @@ app.post('/shorturl', async (req, res)=>{
     if (!/^https?:\/\//i.test(body.url)) {
         body.url = "http://" + body.url;
     }
-    console.log("ok so this is running " , body);
-    
-    console.log("now the other one :", body.url);
+   
   const existing = await Url.findOne({redirecturl: body.url});
   if(existing){
     return res.json({id: existing.shortid});
